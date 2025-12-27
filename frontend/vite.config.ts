@@ -87,6 +87,8 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
         cleanupOutdatedCaches: true,
         sourcemap: true,
+        navigateFallback: null,
+        navigateFallbackDenylist: [/^\/api/],
         runtimeCaching: [
           // API calls - Network First with background sync
           {
