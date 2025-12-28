@@ -11,7 +11,6 @@ import {
   ArrowLeft,
   Loader2,
   FileText,
-  CheckCircle2,
   AlertCircle,
   User as UserIcon,
   Building2,
@@ -22,7 +21,6 @@ import { useRequestStore } from '@/store/requestStore';
 import { useAuthStore } from '@/store/authStore';
 import { api } from '@/lib/api';
 import type { Approval, Workflow, Comment, User } from '@/types';
-import { UserRole } from '@/types';
 import StatusBadge from '@/components/ui/StatusBadge';
 import ApprovalProgress from '@/components/workflow/ApprovalProgress';
 import CommentThread from '@/components/comments/CommentThread';

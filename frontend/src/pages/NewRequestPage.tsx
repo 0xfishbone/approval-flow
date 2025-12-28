@@ -9,11 +9,6 @@ import {
   Clock,
   AlertCircle,
   Zap,
-  UtensilsCrossed,
-  Wrench,
-  Package,
-  Handshake,
-  MoreHorizontal,
   Calendar as CalendarIcon
 } from 'lucide-react';
 import { useRequestStore } from '@/store/requestStore';

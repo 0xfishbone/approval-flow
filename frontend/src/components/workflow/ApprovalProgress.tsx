@@ -31,7 +31,6 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
 export default function ApprovalProgress({
   approvals,
   currentStep,
-  totalSteps,
   isComplete,
 }: ApprovalProgressProps) {
   const getStepStatus = (

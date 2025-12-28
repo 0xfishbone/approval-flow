@@ -27,7 +27,6 @@ export interface ApprovalData {
 
 export default function ApprovalModal({
   mode,
-  requestId,
   userRole,
   onSubmit,
   onCancel,

@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-12-27",
+  "project": "ApprovalFlow",
+  "past_incidents": [],
+  "dangerous_patterns": [
+    {
+      "pattern": "unused_imports",
+      "description": "Unused imports causing TypeScript strict mode failures in Vercel deployments",
+      "severity": "critical",
+      "dateAdded": "2025-12-27"
+    }
+  ],
+  "team_blind_spots": [
+    {
+      "area": "strict_typescript",
+      "description": "Team may not be running TypeScript with strict mode locally before pushing",
+      "recommendation": "Add pre-commit hook to run tsc --noEmit",
+      "dateIdentified": "2025-12-27"
+    }
+  ],
+  "high_risk_areas": [
+    {
+      "path": "frontend/src",
+      "reason": "TypeScript strict mode enabled with noUnusedLocals and noUnusedParameters",
+      "extraScrutiny": "Always verify all imports and variables are used before committing"
+    }
+  ],
+  "review_stats": {
+    "totalReviews": 1,
+    "bugsPreventedCritical": 0,
+    "bugsPrevented": 9,
+    "bugsMissed": 0,
+    "falsePositives": 0
+  }
+}
