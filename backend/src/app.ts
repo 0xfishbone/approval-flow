@@ -95,8 +95,24 @@ export class App {
   private setupMiddleware() {
     // Security
     this.app.use(helmet());
+
+    // CORS - Support multiple origins (comma-separated in env)
+    const allowedOrigins = this.config.corsOrigin.split(',').map(o => o.trim());
     this.app.use(cors({
-      origin: this.config.corsOrigin,
+      origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl)
+        if (!origin) return callback(null, true);
+
+        // Check if origin is in allowed list or matches Vercel preview pattern
+        if (allowedOrigins.some(allowed =>
+          origin === allowed ||
+          origin.match(/https:\/\/approval-flow.*\.vercel\.app/)
+        )) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
       credentials: true,
     }));
 
