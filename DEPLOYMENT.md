@@ -29,10 +29,11 @@ This guide covers deploying both frontend and backend to production.
 
 1. Click **"+ New"** → **"GitHub Repo"**
 2. Select `approval-flow` repository
-3. Railway auto-detects Node.js
-4. Set **Root Directory**: `backend`
-5. Build Command: `npm install && npm run build`
-6. Start Command: `npm start`
+3. Railway auto-detects Node.js via `nixpacks.toml`
+4. **Note**: The monorepo is configured with:
+   - `nixpacks.toml` - Explicitly configures Node.js 18 and build commands
+   - `railway.json` - Defines health check and restart policies
+5. Railway will automatically build and deploy using these configurations
 
 ### Step 4: Configure Environment Variables
 
@@ -251,6 +252,20 @@ If you prefer Render over Railway:
 1. Check JWT secrets are set
 2. Verify database has users (run seed.sql)
 3. Check SendGrid config for email delivery
+
+### Railway Build Error: "npm: command not found"
+
+**Problem**: Railway build fails with exit code 127 and "npm: command not found"
+
+**Solution**:
+This happens when Railway's Nixpacks doesn't detect Node.js in a monorepo structure. The repository includes:
+- `nixpacks.toml` - Explicitly configures Node.js 18
+- `railway.json` - Configures deployment settings
+
+If you still see this error:
+1. Ensure `nixpacks.toml` is committed to the repository
+2. Check Railway is using the root directory (not `backend` subdirectory)
+3. Verify the build logs show "Using Nixpacks"
 
 ---
 

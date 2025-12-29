@@ -1,0 +1,14 @@
+# Nixpacks configuration for Railway deployment
+# Explicitly configure Node.js for monorepo backend
+
+[phases.setup]
+nixPkgs = ["nodejs-18_x", "npm-9_x"]
+
+[phases.install]
+cmds = ["cd backend && npm ci --production=false"]
+
+[phases.build]
+cmds = ["cd backend && npm run build"]
+
+[start]
+cmd = "cd backend && npm start"
