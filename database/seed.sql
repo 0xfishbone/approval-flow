@@ -17,7 +17,7 @@ INSERT INTO users (id, email, password_hash, first_name, last_name, role, depart
   -- Kitchen Staff
   ('770e8400-e29b-41d4-a716-446655440001',
    'chef@example.com',
-   '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5agyWHGfK3WJu',
+   '$2b$12$j5jpBBHjoHvkNhGTDx4NeemesS8YS6sDZvLj97fmuU1mtYMTVgSre',
    'Amadou', 'Diop', 'STAFF',
    '660e8400-e29b-41d4-a716-446655440001',
    '550e8400-e29b-41d4-a716-446655440000'),
@@ -25,7 +25,7 @@ INSERT INTO users (id, email, password_hash, first_name, last_name, role, depart
   -- Kitchen Manager
   ('770e8400-e29b-41d4-a716-446655440002',
    'kitchen.manager@example.com',
-   '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5agyWHGfK3WJu',
+   '$2b$12$j5jpBBHjoHvkNhGTDx4NeemesS8YS6sDZvLj97fmuU1mtYMTVgSre',
    'Fatou', 'Sall', 'MANAGER',
    '660e8400-e29b-41d4-a716-446655440001',
    '550e8400-e29b-41d4-a716-446655440000'),
@@ -33,7 +33,7 @@ INSERT INTO users (id, email, password_hash, first_name, last_name, role, depart
   -- Housekeeping Staff
   ('770e8400-e29b-41d4-a716-446655440003',
    'housekeeper@example.com',
-   '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5agyWHGfK3WJu',
+   '$2b$12$j5jpBBHjoHvkNhGTDx4NeemesS8YS6sDZvLj97fmuU1mtYMTVgSre',
    'Awa', 'Ndiaye', 'STAFF',
    '660e8400-e29b-41d4-a716-446655440002',
    '550e8400-e29b-41d4-a716-446655440000'),
@@ -41,7 +41,7 @@ INSERT INTO users (id, email, password_hash, first_name, last_name, role, depart
   -- Housekeeping Manager
   ('770e8400-e29b-41d4-a716-446655440004',
    'housekeeping.manager@example.com',
-   '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5agyWHGfK3WJu',
+   '$2b$12$j5jpBBHjoHvkNhGTDx4NeemesS8YS6sDZvLj97fmuU1mtYMTVgSre',
    'Moussa', 'Ba', 'MANAGER',
    '660e8400-e29b-41d4-a716-446655440002',
    '550e8400-e29b-41d4-a716-446655440000'),
@@ -49,21 +49,21 @@ INSERT INTO users (id, email, password_hash, first_name, last_name, role, depart
   -- Company-level Approvers (no department)
   ('770e8400-e29b-41d4-a716-446655440005',
    'controleur@example.com',
-   '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5agyWHGfK3WJu',
+   '$2b$12$j5jpBBHjoHvkNhGTDx4NeemesS8YS6sDZvLj97fmuU1mtYMTVgSre',
    'Ousmane', 'Gueye', 'CONTROLEUR',
    null,
    '550e8400-e29b-41d4-a716-446655440000'),
 
   ('770e8400-e29b-41d4-a716-446655440006',
    'direction@example.com',
-   '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5agyWHGfK3WJu',
+   '$2b$12$j5jpBBHjoHvkNhGTDx4NeemesS8YS6sDZvLj97fmuU1mtYMTVgSre',
    'Mariama', 'Diallo', 'DIRECTION',
    null,
    '550e8400-e29b-41d4-a716-446655440000'),
 
   ('770e8400-e29b-41d4-a716-446655440007',
    'econome@example.com',
-   '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5agyWHGfK3WJu',
+   '$2b$12$j5jpBBHjoHvkNhGTDx4NeemesS8YS6sDZvLj97fmuU1mtYMTVgSre',
    'Ibrahima', 'Sy', 'ECONOME',
    null,
    '550e8400-e29b-41d4-a716-446655440000');
