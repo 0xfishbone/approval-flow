@@ -464,7 +464,6 @@ export const createRequestRoutes = (
               email: user.email,
               role: user.role,
               departmentId: user.departmentId,
-              isActive: user.isActive,
               createdAt: user.createdAt,
             } : null,
           };
@@ -565,7 +564,6 @@ export const createRequestRoutes = (
             email: user.email,
             role: user.role,
             departmentId: user.departmentId,
-            isActive: user.isActive,
             createdAt: user.createdAt,
           } : null,
         },
