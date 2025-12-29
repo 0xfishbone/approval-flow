@@ -1,0 +1,23 @@
+{
+  "name": "approvalflow",
+  "version": "1.0.0",
+  "description": "ApprovalFlow - Full-stack approval workflow system",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "install:all": "npm install --prefix frontend && npm install --prefix backend",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.0.0",
+    "typescript": "^5.3.3"
+  },
+  "author": "",
+  "license": "MIT"
+}
