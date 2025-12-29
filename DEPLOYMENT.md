@@ -29,11 +29,15 @@ This guide covers deploying both frontend and backend to production.
 
 1. Click **"+ New"** → **"GitHub Repo"**
 2. Select `approval-flow` repository
-3. Railway auto-detects Node.js via `nixpacks.toml`
-4. **Note**: The monorepo is configured with:
-   - `nixpacks.toml` - Explicitly configures Node.js 18 and build commands
-   - `railway.json` - Defines health check and restart policies
-5. Railway will automatically build and deploy using these configurations
+3. **IMPORTANT**: Railway auto-detects Node.js from `package.json`
+4. **Set Root Directory**:
+   - Go to Settings → Root Directory
+   - Set to: `backend`
+   - This tells Railway to build from the backend folder
+5. Railway will automatically detect Node.js and use:
+   - **Build Command**: `npm install && npm run build` (auto-detected)
+   - **Start Command**: `npm start` (from package.json)
+6. Click **Deploy**
 
 ### Step 4: Configure Environment Variables
 
@@ -253,19 +257,27 @@ If you prefer Render over Railway:
 2. Verify database has users (run seed.sql)
 3. Check SendGrid config for email delivery
 
-### Railway Build Error: "npm: command not found"
+### Railway Build Error: "npm: command not found" or Auto-detection Issues
 
-**Problem**: Railway build fails with exit code 127 and "npm: command not found"
+**Problem**: Railway build fails or doesn't detect Node.js properly
 
 **Solution**:
-This happens when Railway's Nixpacks doesn't detect Node.js in a monorepo structure. The repository includes:
-- `nixpacks.toml` - Explicitly configures Node.js 18
-- `railway.json` - Configures deployment settings
+This happens in monorepo structures when Railway can't find the package.json. Fix:
 
-If you still see this error:
-1. Ensure `nixpacks.toml` is committed to the repository
-2. Check Railway is using the root directory (not `backend` subdirectory)
-3. Verify the build logs show "Using Nixpacks"
+1. **Set Root Directory in Railway Dashboard**:
+   - Go to your service → Settings → Root Directory
+   - Set to: `backend`
+   - Save changes
+
+2. **Clear Build Cache** (if needed):
+   - Settings → Clear Build Cache
+   - Trigger manual redeploy
+
+3. **Verify Detection**:
+   - Check build logs show "Detected Node.js"
+   - Build command should be auto-detected from package.json
+
+**Note**: This project uses Railway's auto-detection (no custom Nixpacks config) for simplicity and reliability.
 
 ---
 
