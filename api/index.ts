@@ -8,9 +8,20 @@ import { App, AppConfig } from '../backend/src/app';
 
 // Initialize Express app once (cached across function invocations)
 let app: App | null = null;
+let initError: Error | null = null;
 
 function getApp() {
-  if (!app) {
+  // Return cached error if initialization failed previously
+  if (initError) {
+    throw initError;
+  }
+
+  // Return cached app if already initialized
+  if (app) {
+    return app;
+  }
+
+  try {
     // Validate required environment variables
     const requiredEnvVars = [
       'DATABASE_URL',
@@ -20,10 +31,20 @@ function getApp() {
       'SENDGRID_FROM_EMAIL',
     ];
 
+    const missingVars: string[] = [];
     for (const envVar of requiredEnvVars) {
       if (!process.env[envVar]) {
-        throw new Error(`Missing required environment variable: ${envVar}`);
+        missingVars.push(envVar);
       }
+    }
+
+    if (missingVars.length > 0) {
+      const error = new Error(
+        `Missing required environment variables: ${missingVars.join(', ')}\n\n` +
+        `Please add these in Vercel Dashboard → Settings → Environment Variables`
+      );
+      initError = error;
+      throw error;
     }
 
     // Build configuration from environment
@@ -52,10 +73,16 @@ function getApp() {
       },
     };
 
+    console.log('[Serverless] Initializing Express app...');
     app = new App(config);
-  }
+    console.log('[Serverless] Express app initialized successfully');
 
-  return app;
+    return app;
+  } catch (error) {
+    console.error('[Serverless] Initialization error:', error);
+    initError = error instanceof Error ? error : new Error(String(error));
+    throw initError;
+  }
 }
 
 // Export handler for Vercel
@@ -64,13 +91,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const appInstance = getApp();
     return appInstance.app(req, res);
   } catch (error) {
-    console.error('Serverless function error:', error);
+    console.error('[Serverless] Request handler error:', error);
+
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+
     return res.status(500).json({
       success: false,
       error: {
-        code: 'INTERNAL_SERVER_ERROR',
-        message: error instanceof Error ? error.message : 'An unexpected error occurred',
+        code: 'SERVERLESS_FUNCTION_ERROR',
+        message: errorMessage,
+        ...(isDevelopment && {
+          stack: error instanceof Error ? error.stack : undefined,
+          details: 'Check Vercel function logs for more information',
+        }),
       },
+      timestamp: new Date().toISOString(),
     });
   }
 }
