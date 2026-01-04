@@ -116,21 +116,30 @@ export class NotificationCore implements NotificationCoreInterface {
       submitter: requestData.submitter,
     });
 
-    await this.email.sendEmail(
-      approver.email,
-      language === 'fr'
-        ? `Approbation requise: ${requestData.requestNumber}`
-        : `Approval Required: ${requestData.requestNumber}`,
-      html
-    );
+    // Send email (skip in development if email not configured)
+    try {
+      await this.email.sendEmail(
+        approver.email,
+        language === 'fr'
+          ? `Approbation requise: ${requestData.requestNumber}`
+          : `Approval Required: ${requestData.requestNumber}`,
+        html
+      );
+    } catch (error) {
+      console.warn('Email notification failed (expected in development):', error);
+    }
 
-    // Send push notification
-    await this.sendPushNotification({
-      userId: approverId,
-      title: language === 'fr' ? 'Approbation requise' : 'Approval Required',
-      body: `${requestData.requestNumber} - ${requestData.submitter}`,
-      data: { requestId, type: 'approval_needed' },
-    });
+    // Send push notification (skip if fails)
+    try {
+      await this.sendPushNotification({
+        userId: approverId,
+        title: language === 'fr' ? 'Approbation requise' : 'Approval Required',
+        body: `${requestData.requestNumber} - ${requestData.submitter}`,
+        data: { requestId, type: 'approval_needed' },
+      });
+    } catch (error) {
+      console.warn('Push notification failed (expected in development):', error);
+    }
   }
 
   /**
@@ -159,20 +168,25 @@ export class NotificationCore implements NotificationCoreInterface {
       requestId
     );
 
-    await this.sendEmail({
-      to: submitter.email,
-      subject:
-        language === 'fr'
-          ? `Demande approuvée: ${requestData.requestNumber}`
-          : `Request Approved: ${requestData.requestNumber}`,
-      templateData: {
-        type: 'approval_complete',
-        submitterName: `${submitter.first_name} ${submitter.last_name}`,
-        requestNumber: requestData.requestNumber,
-        requestUrl: `${process.env.APP_URL || 'http://localhost:5173'}/requests/${requestId}`,
-      },
-      language,
-    });
+    // Send email (skip in development if email not configured)
+    try {
+      await this.sendEmail({
+        to: submitter.email,
+        subject:
+          language === 'fr'
+            ? `Demande approuvée: ${requestData.requestNumber}`
+            : `Request Approved: ${requestData.requestNumber}`,
+        templateData: {
+          type: 'approval_complete',
+          submitterName: `${submitter.first_name} ${submitter.last_name}`,
+          requestNumber: requestData.requestNumber,
+          requestUrl: `${process.env.APP_URL || 'http://localhost:5173'}/requests/${requestId}`,
+        },
+        language,
+      });
+    } catch (error) {
+      console.warn('Email notification failed (expected in development):', error);
+    }
   }
 
   /**
@@ -202,21 +216,26 @@ export class NotificationCore implements NotificationCoreInterface {
       requestId
     );
 
-    await this.sendEmail({
-      to: submitter.email,
-      subject:
-        language === 'fr'
-          ? `Demande rejetée: ${requestData.requestNumber}`
-          : `Request Rejected: ${requestData.requestNumber}`,
-      templateData: {
-        type: 'rejection',
-        submitterName: `${submitter.first_name} ${submitter.last_name}`,
-        requestNumber: requestData.requestNumber,
-        reason,
-        requestUrl: `${process.env.APP_URL || 'http://localhost:5173'}/requests/${requestId}`,
-      },
-      language,
-    });
+    // Send email (skip in development if email not configured)
+    try {
+      await this.sendEmail({
+        to: submitter.email,
+        subject:
+          language === 'fr'
+            ? `Demande rejetée: ${requestData.requestNumber}`
+            : `Request Rejected: ${requestData.requestNumber}`,
+        templateData: {
+          type: 'rejection',
+          submitterName: `${submitter.first_name} ${submitter.last_name}`,
+          requestNumber: requestData.requestNumber,
+          reason,
+          requestUrl: `${process.env.APP_URL || 'http://localhost:5173'}/requests/${requestId}`,
+        },
+        language,
+      });
+    } catch (error) {
+      console.warn('Email notification failed (expected in development):', error);
+    }
   }
 
   /**
@@ -281,21 +300,26 @@ export class NotificationCore implements NotificationCoreInterface {
         requestId
       );
 
-      await this.sendEmail({
-        to: participant.email,
-        subject:
-          language === 'fr'
-            ? `Workflow terminé: ${request.request_number}`
-            : `Workflow Complete: ${request.request_number}`,
-        templateData: {
-          type: 'workflow_complete',
-          participantName: `${participant.first_name} ${participant.last_name}`,
-          requestNumber: request.request_number,
-          requestUrl: `${process.env.APP_URL || 'http://localhost:5173'}/requests/${requestId}`,
-          pdfUrl,
-        },
-        language,
-      });
+      // Send email (skip in development if email not configured)
+      try {
+        await this.sendEmail({
+          to: participant.email,
+          subject:
+            language === 'fr'
+              ? `Workflow terminé: ${request.request_number}`
+              : `Workflow Complete: ${request.request_number}`,
+          templateData: {
+            type: 'workflow_complete',
+            participantName: `${participant.first_name} ${participant.last_name}`,
+            requestNumber: request.request_number,
+            requestUrl: `${process.env.APP_URL || 'http://localhost:5173'}/requests/${requestId}`,
+            pdfUrl,
+          },
+          language,
+        });
+      } catch (error) {
+        console.warn('Email notification failed (expected in development):', error);
+      }
     }
   }
 

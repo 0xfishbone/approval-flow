@@ -9,6 +9,7 @@ import { RequestCore } from '../../core/request';
 import { UserCore } from '../../core/user';
 import { WorkflowCore } from '../../core/workflow';
 import { CommentCore } from '../../core/comment';
+import { NotificationCore } from '../../core/notification';
 import { StorageWrapper } from '../../platform';
 import { AuthRequest } from '../middleware/auth.middleware';
 import {
@@ -49,7 +50,8 @@ export const createRequestRoutes = (
   userCore: UserCore,
   workflowCore: WorkflowCore,
   commentCore: CommentCore,
-  storageWrapper: StorageWrapper
+  storageWrapper: StorageWrapper,
+  notificationCore: NotificationCore
 ): Router => {
   const router = Router();
 
@@ -94,7 +96,27 @@ export const createRequestRoutes = (
         // Auto-create workflow for the request
         const user = await userCore.getUserById(req.user.userId);
         if (user) {
-          await workflowCore.createWorkflow(request.id, request.companyId, user.role);
+          const workflow = await workflowCore.createWorkflow(request.id, request.companyId, user.role);
+
+          // Send notification to first approver
+          const firstApprover = await workflowCore.getCurrentApprover(workflow.id);
+          if (firstApprover) {
+            const companyUsers = await userCore.getUsersByCompany(request.companyId);
+            const firstApproverUser = companyUsers.find(
+              (u) => u.role === firstApprover.role
+            );
+            if (firstApproverUser) {
+              await notificationCore.notifyApprovalNeeded(
+                request.id,
+                firstApproverUser.id,
+                {
+                  requestNumber: request.requestNumber,
+                  items: request.items,
+                  submitter: `${user.firstName} ${user.lastName}`,
+                }
+              );
+            }
+          }
         }
 
         res.status(201).json({

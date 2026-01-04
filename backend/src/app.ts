@@ -158,7 +158,7 @@ export class App {
     this.app.use(
       '/api/requests',
       authMw,
-      createRequestRoutes(this.requestCore, this.userCore, this.workflowCore, this.commentCore, this.storage)
+      createRequestRoutes(this.requestCore, this.userCore, this.workflowCore, this.commentCore, this.storage, this.notificationCore)
     );
     this.app.use(
       '/api/workflows',

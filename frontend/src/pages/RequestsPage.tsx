@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Plus, Loader2, FileText } from 'lucide-react';
 import { useRequestStore } from '@/store/requestStore';
 import { useAuthStore } from '@/store/authStore';
@@ -12,13 +12,14 @@ import { RequestStatus, UserRole } from '@/types';
 import RequestCard from '@/components/ui/RequestCard';
 
 export default function RequestsPage() {
+  const location = useLocation();
   const { user } = useAuthStore();
   const { requests, fetchRequests, isLoading } = useRequestStore();
   const [filter, setFilter] = useState<RequestStatus | 'ALL'>('ALL');
 
   useEffect(() => {
     fetchRequests();
-  }, []);
+  }, [fetchRequests, location.key]); // Refetch when navigating back to this page
 
   const filteredRequests = filter === 'ALL'
     ? requests

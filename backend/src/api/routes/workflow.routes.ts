@@ -161,13 +161,17 @@ export const createWorkflowRoutes = (
           location
         );
 
-        // Send notifications
+        // Update request status and send notifications
         const request = await requestCore.getRequestById(req.params.requestId);
         if (request) {
           const updatedWorkflow = await workflowCore.getWorkflowByRequestId(req.params.requestId);
 
           if (updatedWorkflow?.isComplete) {
-            // Workflow complete - notify submitter
+            // Workflow complete - update status and notify submitter
+            await requestCore['db'].update('requests', req.params.requestId, {
+              status: 'APPROVED',
+            });
+
             await notificationCore.notifyApprovalComplete(
               req.params.requestId,
               request.creatorId,
@@ -177,6 +181,13 @@ export const createWorkflowRoutes = (
               }
             );
           } else if (updatedWorkflow) {
+            // Set status to IN_PROGRESS on first approval
+            if (request.status === 'PENDING') {
+              await requestCore['db'].update('requests', req.params.requestId, {
+                status: 'IN_PROGRESS',
+              });
+            }
+
             // Get next approver and notify them
             const nextApproverStep = await workflowCore.getCurrentApprover(updatedWorkflow.id);
             if (nextApproverStep) {
@@ -285,9 +296,13 @@ export const createWorkflowRoutes = (
           location
         );
 
-        // Send rejection notification to submitter
+        // Update request status to REJECTED and send notification
         const request = await requestCore.getRequestById(req.params.requestId);
         if (request) {
+          await requestCore['db'].update('requests', req.params.requestId, {
+            status: 'REJECTED',
+          });
+
           await notificationCore.notifyRejection(
             req.params.requestId,
             request.creatorId,
