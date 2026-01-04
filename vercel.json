@@ -7,32 +7,10 @@
     {
       "source": "/api/:path*",
       "destination": "/api"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/manifest.webmanifest",
-      "dest": "/manifest.webmanifest"
     },
     {
-      "src": "/registerSW.js",
-      "dest": "/registerSW.js"
-    },
-    {
-      "src": "/sw.js",
-      "dest": "/sw.js"
-    },
-    {
-      "src": "/workbox-(.+).js",
-      "dest": "/workbox-$1.js"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "headers": [
