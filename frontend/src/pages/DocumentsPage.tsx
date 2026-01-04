@@ -36,7 +36,7 @@ export default function DocumentsPage() {
     try {
       setLoading(true);
       const response = await fetch(
-        `${API_URL}/api/documents/request/${reqId}`,
+        `${API_URL}/documents/request/${reqId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,7 +60,7 @@ export default function DocumentsPage() {
   const generatePDF = async (reqId: string) => {
     try {
       setGenerating(reqId);
-      const response = await fetch(`${API_URL}/api/documents/generate-pdf`, {
+      const response = await fetch(`${API_URL}/documents/generate-pdf`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

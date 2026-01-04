@@ -32,8 +32,8 @@ export default function NotificationsPage() {
     try {
       setLoading(true);
       const url = filter === 'unread'
-        ? `${API_URL}/api/notifications?unreadOnly=true`
-        : `${API_URL}/api/notifications`;
+        ? `${API_URL}/notifications?unreadOnly=true`
+        : `${API_URL}/notifications`;
 
       const response = await fetch(url, {
         headers: {
@@ -57,7 +57,7 @@ export default function NotificationsPage() {
   const markAsRead = async (notificationId: string) => {
     try {
       const response = await fetch(
-        `${API_URL}/api/notifications/${notificationId}/read`,
+        `${API_URL}/notifications/${notificationId}/read`,
         {
           method: 'PATCH',
           headers: {
@@ -80,7 +80,7 @@ export default function NotificationsPage() {
 
   const markAllAsRead = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/notifications/read-all`, {
+      const response = await fetch(`${API_URL}/notifications/read-all`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,

@@ -45,8 +45,8 @@ export function useNotifications(options?: {
 
     try {
       const url = unreadOnly
-        ? `${API_URL}/api/notifications?unreadOnly=true`
-        : `${API_URL}/api/notifications`;
+        ? `${API_URL}/notifications?unreadOnly=true`
+        : `${API_URL}/notifications`;
 
       const response = await fetch(url, {
         headers: {
@@ -77,7 +77,7 @@ export function useNotifications(options?: {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/notifications/unread-count`, {
+      const response = await fetch(`${API_URL}/notifications/unread-count`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -100,7 +100,7 @@ export function useNotifications(options?: {
 
       try {
         const response = await fetch(
-          `${API_URL}/api/notifications/${notificationId}/read`,
+          `${API_URL}/notifications/${notificationId}/read`,
           {
             method: 'PATCH',
             headers: {
@@ -128,7 +128,7 @@ export function useNotifications(options?: {
     if (!token) return;
 
     try {
-      const response = await fetch(`${API_URL}/api/notifications/read-all`, {
+      const response = await fetch(`${API_URL}/notifications/read-all`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,
