@@ -8,11 +8,14 @@ import {
   LayoutDashboard,
   FileText,
   ClipboardCheck,
+  Bell,
+  FolderOpen,
   LogOut,
   type LucideIcon
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { UserRole } from '@/types';
+import { NotificationBadge } from '@/components/ui/NotificationBadge';
 
 interface NavItem {
   path: string;
@@ -35,6 +38,8 @@ export default function MainLayout() {
   const navItems: NavItem[] = [
     { path: '/dashboard', label: 'Tableau de bord', Icon: LayoutDashboard },
     { path: '/requests', label: 'Demandes', Icon: FileText },
+    { path: '/notifications', label: 'Notifications', Icon: Bell },
+    { path: '/documents', label: 'Documents', Icon: FolderOpen },
   ];
 
   // Role-specific navigation items
@@ -102,11 +107,15 @@ export default function MainLayout() {
                     `}
                     aria-current={active ? 'page' : undefined}
                   >
-                    <item.Icon
-                      size={20}
-                      strokeWidth={active ? 2.5 : 2}
-                      aria-hidden="true"
-                    />
+                    {item.path === '/notifications' ? (
+                      <NotificationBadge />
+                    ) : (
+                      <item.Icon
+                        size={20}
+                        strokeWidth={active ? 2.5 : 2}
+                        aria-hidden="true"
+                      />
+                    )}
                     <span>{item.label}</span>
                   </Link>
                 );
@@ -162,11 +171,15 @@ export default function MainLayout() {
                 `}
                 aria-current={active ? 'page' : undefined}
               >
-                <item.Icon
-                  size={24}
-                  strokeWidth={active ? 2.5 : 2}
-                  aria-hidden="true"
-                />
+                {item.path === '/notifications' ? (
+                  <NotificationBadge />
+                ) : (
+                  <item.Icon
+                    size={24}
+                    strokeWidth={active ? 2.5 : 2}
+                    aria-hidden="true"
+                  />
+                )}
                 <span className="text-xs font-medium leading-tight text-center">{item.label}</span>
               </Link>
             );

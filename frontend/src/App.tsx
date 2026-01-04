@@ -23,6 +23,8 @@ const RequestsPage = lazy(() => import('@/pages/RequestsPage'));
 const RequestDetailPage = lazy(() => import('@/pages/RequestDetailPage'));
 const NewRequestPage = lazy(() => import('@/pages/NewRequestPage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
+const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
+const DocumentsPage = lazy(() => import('@/pages/DocumentsPage'));
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore();
@@ -100,6 +102,8 @@ function App() {
           <Route path="requests" element={<RequestsPage />} />
           <Route path="requests/new" element={<NewRequestPage />} />
           <Route path="requests/:id" element={<RequestDetailPage />} />
+          <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="documents" element={<DocumentsPage />} />
           <Route path="profile" element={<ProfilePage />} />
         </Route>
 

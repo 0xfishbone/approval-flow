@@ -7,6 +7,7 @@ import { Router, Response } from 'express';
 import { WorkflowCore } from '../../core/workflow';
 import { RequestCore } from '../../core/request';
 import { UserCore } from '../../core/user';
+import { NotificationCore } from '../../core/notification';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { validate, approveStepSchema, rejectStepSchema } from '../middleware';
 import { Action } from '../../shared/types';
@@ -14,7 +15,8 @@ import { Action } from '../../shared/types';
 export const createWorkflowRoutes = (
   workflowCore: WorkflowCore,
   requestCore: RequestCore,
-  userCore: UserCore
+  userCore: UserCore,
+  notificationCore: NotificationCore
 ): Router => {
   const router = Router();
 
@@ -159,7 +161,44 @@ export const createWorkflowRoutes = (
           location
         );
 
-        // TODO: Send notifications to next approver or submitter if complete
+        // Send notifications
+        const request = await requestCore.getRequestById(req.params.requestId);
+        if (request) {
+          const updatedWorkflow = await workflowCore.getWorkflowByRequestId(req.params.requestId);
+
+          if (updatedWorkflow?.isComplete) {
+            // Workflow complete - notify submitter
+            await notificationCore.notifyApprovalComplete(
+              req.params.requestId,
+              request.creatorId,
+              {
+                requestNumber: request.requestNumber,
+                submitter: `${request.creatorId}`,
+              }
+            );
+          } else if (updatedWorkflow) {
+            // Get next approver and notify them
+            const nextApproverStep = await workflowCore.getCurrentApprover(updatedWorkflow.id);
+            if (nextApproverStep) {
+              // Find a user with this role in the company to notify
+              const companyUsers = await userCore.getUsersByCompany(request.companyId);
+              const nextApproverUser = companyUsers.find(
+                (u) => u.role === nextApproverStep.role
+              );
+              if (nextApproverUser) {
+                await notificationCore.notifyApprovalNeeded(
+                  req.params.requestId,
+                  nextApproverUser.id,
+                  {
+                    requestNumber: request.requestNumber,
+                    items: request.items,
+                    submitter: `${request.creatorId}`,
+                  }
+                );
+              }
+            }
+          }
+        }
 
         res.json({
           success: true,
@@ -246,7 +285,18 @@ export const createWorkflowRoutes = (
           location
         );
 
-        // TODO: Send notification to submitter
+        // Send rejection notification to submitter
+        const request = await requestCore.getRequestById(req.params.requestId);
+        if (request) {
+          await notificationCore.notifyRejection(
+            req.params.requestId,
+            request.creatorId,
+            rejectionReason,
+            {
+              requestNumber: request.requestNumber,
+            }
+          );
+        }
 
         res.json({
           success: true,

@@ -11,6 +11,8 @@ import { createAuthRoutes } from './api/routes/auth.routes';
 import { createRequestRoutes } from './api/routes/request.routes';
 import { createWorkflowRoutes } from './api/routes/workflow.routes';
 import { createSignatureRoutes } from './api/routes/signature.routes';
+import { createNotificationRoutes } from './api/routes/notification.routes';
+import { createDocumentRoutes } from './api/routes/document.routes';
 import { UserCore } from './core/user';
 import { RequestCore } from './core/request';
 import { WorkflowCore } from './core/workflow';
@@ -161,17 +163,23 @@ export class App {
     this.app.use(
       '/api/workflows',
       authMw,
-      createWorkflowRoutes(this.workflowCore, this.requestCore, this.userCore)
+      createWorkflowRoutes(this.workflowCore, this.requestCore, this.userCore, this.notificationCore)
     );
     this.app.use(
       '/api/signatures',
       authMw,
       createSignatureRoutes(this.signatureCore, this.auditCore)
     );
-
-    // TODO: Add more routes as modules are implemented
-    // this.app.use('/api/comments', createCommentRoutes(this.commentCore));
-    // etc.
+    this.app.use(
+      '/api/notifications',
+      authMw,
+      createNotificationRoutes(this.notificationCore, this.userCore)
+    );
+    this.app.use(
+      '/api/documents',
+      authMw,
+      createDocumentRoutes(this.documentCore, this.requestCore, this.userCore)
+    );
   }
 
   private setupErrorHandling() {
