@@ -364,7 +364,28 @@ export const createWorkflowRoutes = (
       // Get current approver if not complete
       let currentApprover = null;
       if (!workflow.isComplete) {
-        currentApprover = await workflowCore.getCurrentApprover(workflow.id);
+        const currentApproverInfo = await workflowCore.getCurrentApprover(workflow.id);
+        if (currentApproverInfo) {
+          // Get request to find company
+          const request = await requestCore.getRequestById(req.params.requestId);
+          if (request) {
+            // Find a user with this role in the company
+            const companyUsers = await userCore.getUsersByCompany(request.companyId);
+            const approverUser = companyUsers.find(
+              (u) => u.role === currentApproverInfo.role
+            );
+            if (approverUser) {
+              currentApprover = {
+                id: approverUser.id,
+                role: currentApproverInfo.role,
+                stepOrder: currentApproverInfo.stepOrder,
+                firstName: approverUser.firstName,
+                lastName: approverUser.lastName,
+                email: approverUser.email,
+              };
+            }
+          }
+        }
       }
 
       res.json({
