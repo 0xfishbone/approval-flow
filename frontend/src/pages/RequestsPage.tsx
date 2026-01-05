@@ -33,8 +33,9 @@ export default function RequestsPage() {
           <p className="text-sm sm:text-base text-gray-600">{filteredRequests.length} demande(s)</p>
         </div>
 
+        {/* Desktop new request button */}
         {user?.role === UserRole.STAFF && (
-          <Link to="/requests/new" className="btn btn-primary justify-center sm:justify-start">
+          <Link to="/requests/new" className="hidden sm:flex btn btn-primary justify-center sm:justify-start">
             <Plus size={20} aria-hidden="true" />
             <span>Nouvelle demande</span>
           </Link>
@@ -119,6 +120,18 @@ export default function RequestsPage() {
             {filter === 'ALL' ? 'Créez votre première demande' : 'Essayez un autre filtre'}
           </p>
         </div>
+      )}
+
+      {/* Mobile FAB - Floating Action Button for New Request */}
+      {user?.role === UserRole.STAFF && (
+        <Link
+          to="/requests/new"
+          className="sm:hidden fixed bottom-20 right-6 w-14 h-14 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 active:scale-95 transition-all duration-200 flex items-center justify-center z-40"
+          aria-label="Nouvelle demande"
+          style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}
+        >
+          <Plus size={28} strokeWidth={2.5} aria-hidden="true" />
+        </Link>
       )}
     </div>
   );

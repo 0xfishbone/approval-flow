@@ -1,7 +1,11 @@
 import { Bell } from 'lucide-react';
 import { useNotifications } from '../../lib/useNotifications';
 
-export function NotificationBadge() {
+interface NotificationBadgeProps {
+  size?: number;
+}
+
+export function NotificationBadge({ size = 20 }: NotificationBadgeProps) {
   const { unreadCount } = useNotifications({
     pollInterval: 30000, // Poll every 30 seconds
     unreadOnly: true,
@@ -9,7 +13,7 @@ export function NotificationBadge() {
 
   return (
     <div className="relative inline-flex">
-      <Bell className="w-5 h-5" />
+      <Bell size={size} />
       {unreadCount > 0 && (
         <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>

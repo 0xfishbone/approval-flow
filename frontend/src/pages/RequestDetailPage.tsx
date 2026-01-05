@@ -133,6 +133,16 @@ export default function RequestDetailPage() {
   };
 
   // Check if current user is the current approver
+  // Debug logging
+  console.log('Approval Debug:', {
+    user: user?.id,
+    userRole: user?.role,
+    currentApprover: workflowData?.currentApprover,
+    workflowComplete: workflow?.isComplete,
+    workflow,
+    workflowData
+  });
+
   const isCurrentApprover =
     user &&
     workflowData?.currentApprover &&

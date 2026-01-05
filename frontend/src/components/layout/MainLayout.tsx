@@ -153,7 +153,7 @@ export default function MainLayout() {
         aria-label="Navigation principale mobile"
         style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 8px)' }}
       >
-        <div className="flex justify-around items-center px-2 py-3">
+        <div className="flex justify-around items-center px-1 py-2">
           {navItems.map((item) => {
             const active = isActive(item.path);
             return (
@@ -161,8 +161,8 @@ export default function MainLayout() {
                 key={item.path}
                 to={item.path}
                 className={`
-                  flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg
-                  transition-all duration-200 min-w-[72px] min-h-[60px]
+                  flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg
+                  transition-all duration-200 min-w-[60px] min-h-[56px] flex-1
                   ${
                     active
                       ? 'text-primary-600 bg-primary-50'
@@ -172,15 +172,15 @@ export default function MainLayout() {
                 aria-current={active ? 'page' : undefined}
               >
                 {item.path === '/notifications' ? (
-                  <NotificationBadge />
+                  <NotificationBadge size={20} />
                 ) : (
                   <item.Icon
-                    size={24}
+                    size={20}
                     strokeWidth={active ? 2.5 : 2}
                     aria-hidden="true"
                   />
                 )}
-                <span className="text-xs font-medium leading-tight text-center">{item.label}</span>
+                <span className="text-[10px] font-medium leading-tight text-center truncate max-w-full">{item.label}</span>
               </Link>
             );
           })}
