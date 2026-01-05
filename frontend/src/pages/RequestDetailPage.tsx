@@ -137,7 +137,7 @@ export default function RequestDetailPage() {
     user &&
     workflowData?.currentApprover &&
     !workflow?.isComplete &&
-    user.role === workflowData.currentApprover.role;
+    user.id === workflowData.currentApprover.id;
 
   if (isLoading) {
     return (
@@ -312,8 +312,8 @@ export default function RequestDetailPage() {
           </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-4 sm:space-y-6">
+        {/* Desktop Sidebar - hidden on mobile */}
+        <div className="hidden lg:block space-y-4 sm:space-y-6">
           {/* Actions */}
           <div className="card p-4 sm:p-6">
             <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">Actions</h2>
@@ -359,6 +359,66 @@ export default function RequestDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Sticky Bottom Action Bar - visible only on mobile */}
+      {(isCurrentApprover || workflow?.isComplete) && (
+        <div
+          className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50"
+          role="region"
+          aria-label="Actions d'approbation"
+          style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 16px)' }}
+        >
+          <div className="px-4 py-4 space-y-3">
+            {/* Alert message for mobile */}
+            {isCurrentApprover && (
+              <div className="bg-primary-50 border border-primary-200 rounded-lg p-3">
+                <div className="flex items-start gap-2">
+                  <AlertCircle size={18} className="text-primary-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                  <p className="text-sm text-primary-700 font-medium">
+                    Cette demande nécessite votre approbation
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Action buttons */}
+            <div className="flex flex-col gap-3">
+              {isCurrentApprover && (
+                <>
+                  <button
+                    onClick={() => setApprovalModal({ isOpen: true, mode: 'approve' })}
+                    className="btn btn-success w-full justify-center"
+                    aria-label="Approuver cette demande"
+                  >
+                    <ThumbsUp size={20} aria-hidden="true" />
+                    <span>Approuver</span>
+                  </button>
+
+                  <button
+                    onClick={() => setApprovalModal({ isOpen: true, mode: 'reject' })}
+                    className="btn btn-danger w-full justify-center"
+                    aria-label="Rejeter cette demande"
+                  >
+                    <ThumbsDown size={20} aria-hidden="true" />
+                    <span>Rejeter</span>
+                  </button>
+                </>
+              )}
+
+              {/* Download PDF - only show after workflow is complete */}
+              {workflow?.isComplete && (
+                <button
+                  className="btn btn-secondary w-full justify-center"
+                  aria-label="Télécharger le PDF de cette demande"
+                >
+                  <FileText size={20} aria-hidden="true" />
+                  <span>Télécharger PDF</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Approval Modal */}
       {approvalModal.isOpen && user && id && (
