@@ -68,7 +68,7 @@ CREATE INDEX idx_refresh_tokens_token ON refresh_tokens(token);
 -- REQUESTS
 -- ============================================================================
 
-CREATE TYPE request_status AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'COMPLETED');
+CREATE TYPE request_status AS ENUM ('PENDING', 'IN_PROGRESS', 'APPROVED', 'REJECTED', 'COMPLETED');
 CREATE TYPE workflow_step AS ENUM ('MANAGER', 'CONTROLEUR', 'DIRECTION', 'ECONOME');
 
 CREATE TABLE requests (
